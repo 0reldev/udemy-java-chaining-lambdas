@@ -1,6 +1,9 @@
 package dev.lpa;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -70,5 +73,48 @@ public class Main {
         Predicate<String> combined3 = p3.and(p4).negate();
         System.out.println("combined3 = " + combined3.test(name));
 //        combined3 = true
+
+        record Person(String firstName, String lastName) {}
+
+        List<Person> list = new ArrayList<>(Arrays.asList(
+                new Person("Peter", "Pan"),
+                new Person("Peter", "PumpkinEater"),
+                new Person("Minnie", "Mouse"),
+                new Person("Mickey", "Mouse")
+        ));
+
+        list.sort((o1, o2) -> o1.lastName.compareTo((o2.lastName)));
+        list.forEach(System.out::println);
+//        Person[firstName=Minnie, lastName=Mouse]
+//        Person[firstName=Mickey, lastName=Mouse]
+//        Person[firstName=Peter, lastName=Pan]
+//        Person[firstName=Peter, lastName=PumpkinEater]
+
+        System.out.println("---------------");
+        list.sort(Comparator.comparing(Person::lastName));
+        list.forEach(System.out::println);
+//        Person[firstName=Minnie, lastName=Mouse]
+//        Person[firstName=Mickey, lastName=Mouse]
+//        Person[firstName=Peter, lastName=Pan]
+//        Person[firstName=Peter, lastName=PumpkinEater]
+
+        System.out.println("---------------");
+        list.sort(Comparator.comparing(Person::lastName)
+                        .thenComparing(Person::firstName));
+        list.forEach(System.out::println);
+//        Person[firstName=Mickey, lastName=Mouse]
+//        Person[firstName=Minnie, lastName=Mouse]
+//        Person[firstName=Peter, lastName=Pan]
+//        Person[firstName=Peter, lastName=PumpkinEater]
+
+        System.out.println("---------------");
+        list.sort(Comparator.comparing(Person::lastName)
+                .thenComparing(Person::firstName)
+                .reversed());
+        list.forEach(System.out::println);
+//        Person[firstName=Peter, lastName=PumpkinEater]
+//        Person[firstName=Peter, lastName=Pan]
+//        Person[firstName=Minnie, lastName=Mouse]
+//        Person[firstName=Mickey, lastName=Mouse]
     }
 }
